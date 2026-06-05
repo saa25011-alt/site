@@ -30,79 +30,30 @@
         }
     </script>
     
-    <!-- 1. IMAGE ERROR / FAILSAFE SYSTEM -->
+    <!-- 1. IMAGE SAFETY FALLBACK SYSTEM (Non-blocking, silent backup render) -->
     <script>
         function handleImgError(img, iconName) {
-            const parent = img.parentElement;
-            if (!parent) return;
-
-            const iconMap = {
-                'mountain': '<i data-lucide="mountain" class="w-16 h-16 text-sky-200"></i>',
-                'drone': '<i data-lucide="navigation" class="w-16 h-16 text-brand-accent"></i>',
-                'sprout': '<i data-lucide="sprout" class="w-16 h-16 text-emerald-400"></i>',
-                'hammer': '<i data-lucide="hammer" class="w-16 h-16 text-sky-400"></i>',
-                'utensils': '<i data-lucide="utensils" class="w-16 h-16 text-brand-accent"></i>',
-                'pizza': '<i data-lucide="pizza" class="w-16 h-16 text-amber-500"></i>',
-                'apple': '<i data-lucide="apple" class="w-16 h-16 text-red-500"></i>',
-                'droplet': '<i data-lucide="droplet" class="w-16 h-16 text-sky-400"></i>',
-                'sun': '<i data-lucide="sun" class="w-16 h-16 text-yellow-400"></i>',
-                'layout': '<i data-lucide="layout" class="w-16 h-16 text-purple-400"></i>'
-            };
-
-            const iconHtml = iconMap[iconName] || '<i data-lucide="image" class="w-16 h-16 text-slate-400"></i>';
-
-            const placeholder = document.createElement('div');
-            placeholder.className = img.className + ' flex flex-col items-center justify-center bg-gradient-to-br from-slate-800 to-slate-950 border border-white/10 text-center p-6';
-            placeholder.style.minHeight = img.offsetHeight > 100 ? img.offsetHeight + 'px' : '300px';
-            placeholder.innerHTML = `
-                <div class="mb-3 animate-pulse">${iconHtml}</div>
-                <span class="text-xs text-slate-400 font-bold tracking-wider">西農 デジタルラボ・プレビュー</span>
-                <span class="text-[9px] text-slate-500 mt-1">Ehime Saijo Agri</span>
-            `;
-
+            // If image fails to load (e.g. offline preview), gracefully show the background design card
             img.style.display = 'none';
-            parent.appendChild(placeholder);
-
-            if (window.lucide) {
-                lucide.createIcons();
+            const fallbackCard = img.previousElementSibling;
+            if (fallbackCard) {
+                fallbackCard.classList.remove('opacity-40');
+                fallbackCard.classList.add('opacity-100', 'scale-100');
             }
         }
     </script>
 
-    <!-- Google Fonts & AOS -->
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <!-- AOS (Animate On Scroll) CSS -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         .hero-gradient {
             background: linear-gradient(135deg, rgba(27, 67, 50, 0.95) 0%, rgba(3, 105, 161, 0.85) 100%);
-        }
-        /* Custom image crop using the provided perfect composite image */
-        .crop-hero {
-            background-image: url('watermarked_img_16018842188286556315.png');
-            background-size: 300% 200%;
-            background-position: 0% 0%; /* 左上: 田植え実習＆ドローン */
-            background-repeat: no-repeat;
-        }
-        .crop-agriculture {
-            background-image: url('watermarked_img_16018842188286556315.png');
-            background-size: 300% 200%;
-            background-position: 0% 0%; /* 左上: 爽快な田植え風景の高校生たち */
-            background-repeat: no-repeat;
-        }
-        .crop-engineering {
-            background-image: url('watermarked_img_16018842188286556315.png');
-            background-size: 300% 200%;
-            background-position: 100% 30%; /* 右上: 安全ヘルメット木の伐採・森林管理 */
-            background-repeat: no-repeat;
-        }
-        .crop-design {
-            background-image: url('watermarked_img_16018842188286556315.png');
-            background-size: 300% 200%;
-            background-position: 0% 100%; /* 左下: 高校生レストラン調理・おもてなし */
-            background-repeat: no-repeat;
         }
     </style>
 </head>
@@ -162,10 +113,14 @@
 
     <!-- 1. Hero Section -->
     <section class="relative min-h-screen pt-20 flex items-center overflow-hidden bg-brand-forest">
-        <!-- Background Image: Mt. Ishizuchi and Saijo countryside -->
+        <!-- Background Image with safe loading technique -->
         <div class="absolute inset-0 z-0">
-            <div class="w-full h-full bg-cover crop-hero opacity-30"></div>
-            <div class="absolute inset-0 bg-gradient-to-tr from-brand-forest via-brand-forestLight/85 to-transparent"></div>
+            <div class="absolute inset-0 bg-gradient-to-tr from-brand-forest via-brand-forestLight/90 to-transparent z-10"></div>
+            <!-- High School Rice Field crop for background -->
+            <img src="watermarked_img_16018842188286556315.png" 
+                 alt="西農の広大な実習農地" 
+                 class="w-[300%] h-[200%] max-w-none absolute left-0 top-0 object-cover opacity-25"
+                 onerror="this.src='https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&q=80&w=2000'">
         </div>
 
         <!-- Decorative Water Ripples & Tech Circles -->
@@ -217,11 +172,26 @@
             <div class="lg:col-span-5 relative" data-aos="fade-left" data-aos-duration="1000">
                 <div class="relative mx-auto max-w-md lg:max-w-none">
                     <div class="absolute -inset-1.5 bg-gradient-to-r from-brand-accent to-brand-500 rounded-3xl blur opacity-30"></div>
-                    <div class="relative bg-white p-3 rounded-2xl shadow-2xl overflow-hidden flex">
-                        <!-- Left-up Farming & Drone image cropped from the provided composite -->
-                        <div class="rounded-xl w-full h-[350px] sm:h-[450px] crop-hero bg-cover"></div>
+                    <div class="relative bg-white p-3 rounded-2xl shadow-2xl overflow-hidden flex h-[350px] sm:h-[450px]">
+                        
+                        <!-- Safe Double Layer Image Wrapper -->
+                        <div class="absolute inset-3 rounded-xl overflow-hidden bg-gradient-to-br from-slate-800 to-slate-900 flex items-center justify-center">
+                            <!-- Background Placeholder Card -->
+                            <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-6 opacity-40">
+                                <i data-lucide="navigation" class="w-16 h-16 text-brand-accent animate-bounce mb-3"></i>
+                                <span class="text-sm font-bold text-slate-300">西農スマート操縦実習</span>
+                                <span class="text-xs text-slate-500">円山農場ドローン学習</span>
+                            </div>
+                            <!-- Loaded real photo (cropped to left-top) -->
+                            <img src="watermarked_img_16018842188286556315.png" 
+                                 alt="西条農業高校ドローン講習" 
+                                 class="absolute w-[300%] h-[200%] max-w-none left-0 top-0 object-cover opacity-0 transition-opacity duration-500"
+                                 onload="this.classList.remove('opacity-0')"
+                                 onerror="handleImgError(this, 'drone')">
+                        </div>
+
                         <!-- Floating Tech Card -->
-                        <div class="absolute bottom-6 left-6 right-6 bg-slate-900/90 backdrop-blur-md text-white p-4 rounded-xl border border-white/10 flex items-center gap-4">
+                        <div class="absolute bottom-6 left-6 right-6 bg-slate-900/90 backdrop-blur-md text-white p-4 rounded-xl border border-white/10 flex items-center gap-4 z-20">
                             <div class="w-12 h-12 rounded-lg bg-brand-accent text-white flex items-center justify-center shrink-0">
                                 <i data-lucide="navigation" class="w-6 h-6"></i>
                             </div>
@@ -283,7 +253,7 @@
                     </div>
                     <h3 class="text-xl font-bold text-slate-900 mb-3">地域を変える、商品開発力</h3>
                     <p class="text-slate-600 text-sm sm:text-base leading-relaxed">
-                        西条市の名産「絹かわなす」や環境大臣賞を受賞した「青パパイヤ」を使用し、地域や大手企業（ピザーラ等）とのコラボ商品開発を実施。ビジネス感覚を磨きます。
+                        西条市の名産「絹かわなす」や環境大臣賞を受勝した「青パパイヤ」を使用し、地域や大手企業（ピザーラ等）とのコラボ商品開発を実施。ビジネス感覚を磨きます。
                     </p>
                 </div>
             </div>
@@ -306,15 +276,27 @@
             <!-- Features Cards Vertical & Alternate -->
             <div class="space-y-16 lg:space-y-24">
                 
-                <!-- Department 1: 食農科学科 -->
+                <!-- Department 1: 食農科学科 (田植えの様子を確実にマスク切り出し) -->
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center">
                     <div class="lg:col-span-6" data-aos="fade-right">
-                        <div class="relative flex">
-                            <div class="absolute -inset-1 bg-gradient-to-r from-brand-accent to-brand-500 rounded-2xl blur opacity-20"></div>
-                            <!-- HIGH SCHOOL STUDENTS active in rice paddy planting - High resolution crop from original visual -->
-                            <div class="rounded-2xl shadow-xl w-full h-[300px] sm:h-[400px] crop-agriculture bg-cover"></div>
+                        <div class="relative flex rounded-2xl shadow-xl w-full h-[300px] sm:h-[400px] overflow-hidden bg-gradient-to-br from-slate-800 to-slate-950 items-center justify-center border border-white/5">
+                            
+                            <!-- Safe Background Card (Shown immediately, always visible until loaded) -->
+                            <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-6 opacity-40 z-0">
+                                <i data-lucide="sprout" class="w-16 h-16 text-emerald-400 mb-3 animate-pulse"></i>
+                                <span class="text-sm font-bold text-white tracking-widest">食農科学科 実習</span>
+                                <span class="text-xs text-slate-400 mt-1">青空の下、泥に触れて笑顔の一列手植え田植え</span>
+                            </div>
+
+                            <!-- Crop Masked Image (Left-Top Crop of watermarked_img_16018842188286556315.png) -->
+                            <img src="watermarked_img_16018842188286556315.png" 
+                                 alt="食農科学科の高校生たちが笑顔で泥に触れ、田植えを行っている実習風景" 
+                                 class="absolute w-[300%] h-[200%] max-w-none left-0 top-0 object-cover opacity-0 transition-opacity duration-500 z-10"
+                                 onload="this.classList.remove('opacity-0')"
+                                 onerror="handleImgError(this, 'sprout')">
+
                             <!-- Overlay badge -->
-                            <div class="absolute top-4 left-4 bg-emerald-600 text-white font-extrabold px-4 py-2 rounded-lg text-xs tracking-wider shadow">
+                            <div class="absolute top-4 left-4 bg-emerald-600 text-white font-extrabold px-4 py-2 rounded-lg text-xs tracking-wider shadow z-20">
                                 DEPARTMENT 01
                             </div>
                         </div>
@@ -341,15 +323,27 @@
                     </div>
                 </div>
 
-                <!-- Department 2: 環境工学科 -->
+                <!-- Department 2: 環境工学科 (木の伐採・森林保全を確実にマスク切り出し) -->
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center">
                     <div class="lg:col-span-6 lg:order-2" data-aos="fade-left">
-                        <div class="relative flex">
-                            <div class="absolute -inset-1 bg-gradient-to-r from-sky-400 to-sky-700 rounded-2xl blur opacity-20"></div>
-                            <!-- HIGH SCHOOL STUDENTS active in logging & forest maintenance - High resolution crop from original visual -->
-                            <div class="rounded-2xl shadow-xl w-full h-[300px] sm:h-[400px] crop-engineering bg-cover"></div>
+                        <div class="relative flex rounded-2xl shadow-xl w-full h-[300px] sm:h-[400px] overflow-hidden bg-gradient-to-br from-slate-800 to-slate-950 items-center justify-center border border-white/5">
+                            
+                            <!-- Safe Background Card (Shown immediately, always visible until loaded) -->
+                            <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-6 opacity-40 z-0">
+                                <i data-lucide="hammer" class="w-16 h-16 text-sky-400 mb-3 animate-pulse"></i>
+                                <span class="text-sm font-bold text-white tracking-widest">環境工学科 森林保全実習</span>
+                                <span class="text-xs text-slate-400 mt-1">ヘルメットを着用した高校生の安全な伐採・森林管理</span>
+                            </div>
+
+                            <!-- Crop Masked Image (Right-Top Crop of watermarked_img_16018842188286556315.png - Column 3) -->
+                            <img src="watermarked_img_16018842188286556315.png" 
+                                 alt="環境工学科の高校生たちが安全ヘルメットを着用し、演習林で木の伐採や森林保全について学んでいる実習風景" 
+                                 class="absolute w-[300%] h-[200%] max-w-none left-[-200%] top-0 object-cover opacity-0 transition-opacity duration-500 z-10"
+                                 onload="this.classList.remove('opacity-0')"
+                                 onerror="handleImgError(this, 'hammer')">
+
                             <!-- Overlay badge -->
-                            <div class="absolute top-4 left-4 bg-brand-500 text-white font-extrabold px-4 py-2 rounded-lg text-xs tracking-wider shadow">
+                            <div class="absolute top-4 left-4 bg-brand-500 text-white font-extrabold px-4 py-2 rounded-lg text-xs tracking-wider shadow z-20">
                                 DEPARTMENT 02
                             </div>
                         </div>
@@ -365,7 +359,7 @@
                             環境工学科 <span class="text-brand-500 text-lg sm:text-2xl font-bold block sm:inline">（Environmental Engineering）</span>
                         </h3>
                         <p class="text-slate-600 leading-relaxed mb-6">
-                            2年次より「農業土木コース」と「環境化学コース」に分かれ専門性を深化。測量、設計、GIS（地理情報システム）などの土木工学から、石鎚山系の清らかな水質環境を守る analytical 技術、防災計画までを学び、地域インフラの担い手を育てます。
+                            2年次より「農業土木コース」と「環境化学コース」に分かれ専門性を深化。測量、設計、GIS（地理情報システム）などの土木工学から、石鎚山系の清らかな水質環境を守る分析技術、防災計画までを学び、地域インフラの担い手を育てます。
                         </p>
                         <!-- Check list -->
                         <ul class="space-y-3 font-semibold text-slate-800">
@@ -376,15 +370,27 @@
                     </div>
                 </div>
 
-                <!-- Department 3: 生活デザイン科 -->
+                <!-- Department 3: 生活デザイン科 (高校生レストランを確実にマスク切り出し) -->
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center">
                     <div class="lg:col-span-6" data-aos="fade-right">
-                        <div class="relative flex">
-                            <div class="absolute -inset-1 bg-gradient-to-r from-brand-accent to-pink-500 rounded-2xl blur opacity-20"></div>
-                            <!-- HIGH SCHOOL STUDENTS preparing high school restaurant lunch - High resolution crop from original visual -->
-                            <div class="rounded-2xl shadow-xl w-full h-[300px] sm:h-[400px] crop-design bg-cover"></div>
+                        <div class="relative flex rounded-2xl shadow-xl w-full h-[300px] sm:h-[400px] overflow-hidden bg-gradient-to-br from-slate-800 to-slate-950 items-center justify-center border border-white/5">
+                            
+                            <!-- Safe Background Card (Shown immediately, always visible until loaded) -->
+                            <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-6 opacity-40 z-0">
+                                <i data-lucide="utensils" class="w-16 h-16 text-brand-accent mb-3 animate-pulse"></i>
+                                <span class="text-sm font-bold text-white tracking-widest">生活デザイン科 実習</span>
+                                <span class="text-xs text-slate-400 mt-1">笑顔で本格的な調理や盛り付けを行う高校生レストラン</span>
+                            </div>
+
+                            <!-- Crop Masked Image (Left-Bottom Crop of watermarked_img_16018842188286556315.png) -->
+                            <img src="watermarked_img_16018842188286556315.png" 
+                                 alt="生活デザイン科の高校生たちが高校生レストランにて笑顔でおもてなしの調理や接客実習をしている様子" 
+                                 class="absolute w-[300%] h-[200%] max-w-none left-0 top-[-100%] object-cover opacity-0 transition-opacity duration-500 z-10"
+                                 onload="this.classList.remove('opacity-0')"
+                                 onerror="handleImgError(this, 'utensils')">
+
                             <!-- Overlay badge -->
-                            <div class="absolute top-4 left-4 bg-brand-accent text-white font-extrabold px-4 py-2 rounded-lg text-xs tracking-wider shadow">
+                            <div class="absolute top-4 left-4 bg-brand-accent text-white font-extrabold px-4 py-2 rounded-lg text-xs tracking-wider shadow z-20">
                                 DEPARTMENT 03
                             </div>
                         </div>
@@ -503,9 +509,12 @@
             <!-- Grid Layout of Clickable Cards -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 
-                <!-- Card 1 -->
+                <!-- Card 1 (田んぼの画像に設定) -->
                 <button onclick="selectProject('drone-project')" class="group text-left focus:outline-none relative overflow-hidden rounded-2xl bg-slate-100 shadow-md h-80 w-full transition-all hover:ring-4 hover:ring-brand-accent flex" data-aos="fade-up" data-aos-delay="100">
-                    <div class="absolute inset-0 w-full h-full crop-agriculture bg-cover transition-transform duration-500 group-hover:scale-110"></div>
+                    <img src="https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&q=80&w=1000" 
+                         alt="日本の美しい水田・田んぼの風景" 
+                         class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                         onerror="handleImgError(this, 'droplet')">
                     <div class="absolute inset-0 bg-gradient-to-t from-brand-forest/90 via-transparent to-transparent"></div>
                     <div class="absolute bottom-6 left-6 right-6 text-white z-10">
                         <span class="text-brand-accent text-xs font-bold tracking-widest uppercase block mb-1">SPRING / DX</span>
@@ -665,7 +674,7 @@
         </div>
     </section>
 
-    <!-- 5. Voice & FAQ Section -->
+    <!-- 5. FAQ & Voice Section -->
     <section id="faq" class="py-20 lg:py-32 bg-sky-50 relative overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             
@@ -754,7 +763,7 @@
                 </div>
             </div>
 
-            <!-- FAQ Section -->
+            <!-- FAQ Accordion -->
             <div>
                 <div class="text-center max-w-3xl mx-auto mb-16" data-aos="fade-up">
                     <span class="text-brand-500 text-sm font-extrabold tracking-widest uppercase block mb-3">FAQ</span>
@@ -1073,11 +1082,11 @@
             'drone-project': {
                 tag: 'SPRING / DX',
                 title: '田植え＆ドローン講習',
-                desc: '西条の豊かな自噴水「うちぬき」を活用して育てる水田での田植えを体験。さらに、パナソニック教育助成やDXハイスクールの支援によって導入された高精度な農業ドローンを操縦し、空中からマルチスペクトルカメラによる生育 analysis の基礎を学びます。',
+                desc: '西条の豊かな自噴水「うちぬき」を活用して育てる水田での田植えを体験。さらに、パナソニック教育助成やDXハイスクールの支援によって導入された高精度な農業ドローンを操縦し、空中からマルチスペクトルカメラによる生育分析の基礎を学びます。',
                 bullets: [
                     '1人1台のiPadを用いた、リアルタイムマルチスペクトル分析の実践',
                     '円山農場の実際の急斜面をマッピングする、安全基準に基づく操縦練習',
-                    '地元農家や他校の先生方も見学に集まる、愛媛県内屈指のDX体験授業'
+                    '地元農家や他校の先生方も見学に集まる、愛媛県内屈指 of DX体験授業'
                 ],
                 simHtml: `
                     <div class="flex items-center justify-between border-b border-white/10 pb-3 mb-4">
@@ -1248,7 +1257,7 @@
             'papaya-project': {
                 tag: 'DECARBONIZATION / AWARD',
                 title: '青パパイヤ研究・環境大臣賞',
-                desc: '食農科学科が中心となり、温室ハウスの上部に太陽光発電パネルを設置し、その下部で日陰でも生育可能な「青パパイヤ」を栽培する最先端のハイブリッド農業を研究。「ソーラーシェアリング×脱炭素農業」の素晴らしい試みとして、環境省主催 of コンテストで全国最高賞の【環境大臣賞金賞】を受賞しました！',
+                desc: '食農科学科が中心となり、温室ハウスの上部に太陽光発電パネルを設置し、その下部で日陰でも生育可能な「青パパイヤ」を栽培する最先端のハイブリッド農業を研究。「ソーラーシェアリング×脱炭素農業」の素晴らしい試みとして、環境省主催のコンテストで全国最高賞の【環境大臣賞金賞】を受賞しました！',
                 bullets: [
                     '荒廃農地を蘇らせ、地球温暖化対策（CO2吸収量が非常に多いパパイヤ）への挑戦',
                     '収穫した青パパイヤの酵素を活かし、地元スイーツ店とヘルシーお菓子を開発',
