@@ -29,17 +29,80 @@
             }
         }
     </script>
-    <!-- Google Fonts -->
+    
+    <!-- 1. IMAGE ERROR / FAILSAFE SYSTEM -->
+    <script>
+        function handleImgError(img, iconName) {
+            const parent = img.parentElement;
+            if (!parent) return;
+
+            const iconMap = {
+                'mountain': '<i data-lucide="mountain" class="w-16 h-16 text-sky-200"></i>',
+                'drone': '<i data-lucide="navigation" class="w-16 h-16 text-brand-accent"></i>',
+                'sprout': '<i data-lucide="sprout" class="w-16 h-16 text-emerald-400"></i>',
+                'hammer': '<i data-lucide="hammer" class="w-16 h-16 text-sky-400"></i>',
+                'utensils': '<i data-lucide="utensils" class="w-16 h-16 text-brand-accent"></i>',
+                'pizza': '<i data-lucide="pizza" class="w-16 h-16 text-amber-500"></i>',
+                'apple': '<i data-lucide="apple" class="w-16 h-16 text-red-500"></i>',
+                'droplet': '<i data-lucide="droplet" class="w-16 h-16 text-sky-400"></i>',
+                'sun': '<i data-lucide="sun" class="w-16 h-16 text-yellow-400"></i>',
+                'layout': '<i data-lucide="layout" class="w-16 h-16 text-purple-400"></i>'
+            };
+
+            const iconHtml = iconMap[iconName] || '<i data-lucide="image" class="w-16 h-16 text-slate-400"></i>';
+
+            const placeholder = document.createElement('div');
+            placeholder.className = img.className + ' flex flex-col items-center justify-center bg-gradient-to-br from-slate-800 to-slate-950 border border-white/10 text-center p-6';
+            placeholder.style.minHeight = img.offsetHeight > 100 ? img.offsetHeight + 'px' : '300px';
+            placeholder.innerHTML = `
+                <div class="mb-3 animate-pulse">${iconHtml}</div>
+                <span class="text-xs text-slate-400 font-bold tracking-wider">西農 デジタルラボ・プレビュー</span>
+                <span class="text-[9px] text-slate-500 mt-1">Ehime Saijo Agri</span>
+            `;
+
+            img.style.display = 'none';
+            parent.appendChild(placeholder);
+
+            if (window.lucide) {
+                lucide.createIcons();
+            }
+        }
+    </script>
+
+    <!-- Google Fonts & AOS -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
-    <!-- AOS (Animate On Scroll) CSS -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         .hero-gradient {
             background: linear-gradient(135deg, rgba(27, 67, 50, 0.95) 0%, rgba(3, 105, 161, 0.85) 100%);
+        }
+        /* Custom image crop using the provided perfect composite image */
+        .crop-hero {
+            background-image: url('watermarked_img_16018842188286556315.png');
+            background-size: 300% 200%;
+            background-position: 0% 0%; /* 左上: 田植え実習＆ドローン */
+            background-repeat: no-repeat;
+        }
+        .crop-agriculture {
+            background-image: url('watermarked_img_16018842188286556315.png');
+            background-size: 300% 200%;
+            background-position: 0% 0%; /* 左上: 爽快な田植え風景の高校生たち */
+            background-repeat: no-repeat;
+        }
+        .crop-engineering {
+            background-image: url('watermarked_img_16018842188286556315.png');
+            background-size: 300% 200%;
+            background-position: 100% 30%; /* 右上: 安全ヘルメット木の伐採・森林管理 */
+            background-repeat: no-repeat;
+        }
+        .crop-design {
+            background-image: url('watermarked_img_16018842188286556315.png');
+            background-size: 300% 200%;
+            background-position: 0% 100%; /* 左下: 高校生レストラン調理・おもてなし */
+            background-repeat: no-repeat;
         }
     </style>
 </head>
@@ -99,9 +162,9 @@
 
     <!-- 1. Hero Section -->
     <section class="relative min-h-screen pt-20 flex items-center overflow-hidden bg-brand-forest">
-        <!-- Background Image: Mt. Ishizuchi and gorgeous Saijo countryside (Real atmosphere) -->
+        <!-- Background Image: Mt. Ishizuchi and Saijo countryside -->
         <div class="absolute inset-0 z-0">
-            <img src="https://images.unsplash.com/photo-1542640244-7e672d6cef21?auto=format&fit=crop&q=80&w=2000" alt="石鎚山と西条の広大な農地" class="w-full h-full object-cover opacity-35">
+            <div class="w-full h-full bg-cover crop-hero opacity-30"></div>
             <div class="absolute inset-0 bg-gradient-to-tr from-brand-forest via-brand-forestLight/85 to-transparent"></div>
         </div>
 
@@ -154,8 +217,9 @@
             <div class="lg:col-span-5 relative" data-aos="fade-left" data-aos-duration="1000">
                 <div class="relative mx-auto max-w-md lg:max-w-none">
                     <div class="absolute -inset-1.5 bg-gradient-to-r from-brand-accent to-brand-500 rounded-3xl blur opacity-30"></div>
-                    <div class="relative bg-white p-3 rounded-2xl shadow-2xl overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1592982537447-7440770cbfc9?auto=format&fit=crop&q=80&w=800" alt="西条農業 円山農場でのスマートドローン操縦実習" class="rounded-xl w-full h-[350px] sm:h-[450px] object-cover">
+                    <div class="relative bg-white p-3 rounded-2xl shadow-2xl overflow-hidden flex">
+                        <!-- Left-up Farming & Drone image cropped from the provided composite -->
+                        <div class="rounded-xl w-full h-[350px] sm:h-[450px] crop-hero bg-cover"></div>
                         <!-- Floating Tech Card -->
                         <div class="absolute bottom-6 left-6 right-6 bg-slate-900/90 backdrop-blur-md text-white p-4 rounded-xl border border-white/10 flex items-center gap-4">
                             <div class="w-12 h-12 rounded-lg bg-brand-accent text-white flex items-center justify-center shrink-0">
@@ -190,7 +254,7 @@
 
             <!-- Intro Features Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
-                <!-- Card 1: Water (Real splash representation) -->
+                <!-- Card 1: Water -->
                 <div class="p-8 rounded-2xl bg-sky-50 border border-sky-100 hover:shadow-lg transition-all duration-300" data-aos="fade-up" data-aos-delay="100">
                     <div class="w-14 h-14 bg-brand-500 rounded-xl flex items-center justify-center text-white shrink-0 shadow-md shadow-sky-500/20 mb-6">
                         <i data-lucide="droplet" class="w-7 h-7"></i>
@@ -226,7 +290,7 @@
         </div>
     </section>
 
-    <!-- 3. Departments (3つの魅力的な学科) Section -->
+    <!-- 3. Departments Section -->
     <section id="departments" class="py-20 lg:py-32 bg-slate-100 relative overflow-hidden">
         <div class="absolute inset-y-0 right-0 w-1/3 bg-blue-100/30 rounded-l-[100px] pointer-events-none"></div>
         
@@ -245,10 +309,10 @@
                 <!-- Department 1: 食農科学科 -->
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center">
                     <div class="lg:col-span-6" data-aos="fade-right">
-                        <div class="relative">
+                        <div class="relative flex">
                             <div class="absolute -inset-1 bg-gradient-to-r from-brand-accent to-brand-500 rounded-2xl blur opacity-20"></div>
-                            <!-- Real citrus orchard atmosphere of Maruyama Farm -->
-                            <img src="https://images.unsplash.com/photo-1611080626919-7cf5a9dbab5b?auto=format&fit=crop&q=80&w=1000" alt="食農科学科の実習" class="rounded-2xl shadow-xl w-full h-[300px] sm:h-[400px] object-cover">
+                            <!-- HIGH SCHOOL STUDENTS active in rice paddy planting - High resolution crop from original visual -->
+                            <div class="rounded-2xl shadow-xl w-full h-[300px] sm:h-[400px] crop-agriculture bg-cover"></div>
                             <!-- Overlay badge -->
                             <div class="absolute top-4 left-4 bg-emerald-600 text-white font-extrabold px-4 py-2 rounded-lg text-xs tracking-wider shadow">
                                 DEPARTMENT 01
@@ -280,10 +344,10 @@
                 <!-- Department 2: 環境工学科 -->
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center">
                     <div class="lg:col-span-6 lg:order-2" data-aos="fade-left">
-                        <div class="relative">
+                        <div class="relative flex">
                             <div class="absolute -inset-1 bg-gradient-to-r from-sky-400 to-sky-700 rounded-2xl blur opacity-20"></div>
-                            <!-- Real clean water water-channel / civil engineering setting representing environmental analysis -->
-                            <img src="https://images.unsplash.com/photo-1508873696983-2df519f0397e?auto=format&fit=crop&q=80&w=1000" alt="環境工学科の実習" class="rounded-2xl shadow-xl w-full h-[300px] sm:h-[400px] object-cover">
+                            <!-- HIGH SCHOOL STUDENTS active in logging & forest maintenance - High resolution crop from original visual -->
+                            <div class="rounded-2xl shadow-xl w-full h-[300px] sm:h-[400px] crop-engineering bg-cover"></div>
                             <!-- Overlay badge -->
                             <div class="absolute top-4 left-4 bg-brand-500 text-white font-extrabold px-4 py-2 rounded-lg text-xs tracking-wider shadow">
                                 DEPARTMENT 02
@@ -301,12 +365,12 @@
                             環境工学科 <span class="text-brand-500 text-lg sm:text-2xl font-bold block sm:inline">（Environmental Engineering）</span>
                         </h3>
                         <p class="text-slate-600 leading-relaxed mb-6">
-                            2年次より「農業土木コース」と「環境化学コース」に分かれ専門性を深化。測量、設計、GIS（地理情報システム）などの土木工学から、石鎚山系の清らかな水質環境を守る分析技術、防災計画までを学び、地域インフラの担い手を育てます。
+                            2年次より「農業土木コース」と「環境化学コース」に分かれ専門性を深化。測量、設計、GIS（地理情報システム）などの土木工学から、石鎚山系の清らかな水質環境を守る analytical 技術、防災計画までを学び、地域インフラの担い手を育てます。
                         </p>
                         <!-- Check list -->
                         <ul class="space-y-3 font-semibold text-slate-800">
                             <li class="flex items-center gap-2"><i data-lucide="check-circle-2" class="w-5 h-5 text-brand-500"></i> 進路の強み！「農業土木」で国家・地方公務員への近道</li>
-                            <li class="flex items-center gap-2"><i data-lucide="check-circle-2" class="w-5 h-5 text-brand-500"></i> トータルステーション等、最新の3次元デジタル測量機器の使用</li>
+                            <li class="flex items-center gap-2"><i data-lucide="check-circle-2" class="w-5 h-5 text-brand-500"></i> トータルステーション等, 最新の3次元デジタル測量機器の使用</li>
                             <li class="flex items-center gap-2"><i data-lucide="check-circle-2" class="w-5 h-5 text-brand-500"></i> 西条の名水「うちぬき」を化学的に成分分析する水質学習</li>
                         </ul>
                     </div>
@@ -315,10 +379,10 @@
                 <!-- Department 3: 生活デザイン科 -->
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center">
                     <div class="lg:col-span-6" data-aos="fade-right">
-                        <div class="relative">
+                        <div class="relative flex">
                             <div class="absolute -inset-1 bg-gradient-to-r from-brand-accent to-pink-500 rounded-2xl blur opacity-20"></div>
-                            <!-- Represents living design / floral horticulture and food prep -->
-                            <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&q=80&w=1000" alt="生活デザイン科の実習" class="rounded-2xl shadow-xl w-full h-[300px] sm:h-[400px] object-cover">
+                            <!-- HIGH SCHOOL STUDENTS preparing high school restaurant lunch - High resolution crop from original visual -->
+                            <div class="rounded-2xl shadow-xl w-full h-[300px] sm:h-[400px] crop-design bg-cover"></div>
                             <!-- Overlay badge -->
                             <div class="absolute top-4 left-4 bg-brand-accent text-white font-extrabold px-4 py-2 rounded-lg text-xs tracking-wider shadow">
                                 DEPARTMENT 03
@@ -328,21 +392,21 @@
                     <div class="lg:col-span-6" data-aos="fade-left">
                         <div class="flex items-center gap-3 mb-4">
                             <div class="w-10 h-10 rounded-full bg-orange-500/10 text-brand-accent flex items-center justify-center">
-                                <i data-lucide="flower2" class="w-5 h-5"></i>
+                                <i data-lucide="utensils" class="w-5 h-5"></i>
                             </div>
-                            <span class="text-brand-accent font-bold tracking-wide">暮らしを創造するプロになる</span>
+                            <span class="text-brand-accent font-bold tracking-wide">食とデザインで地域をおもてなし</span>
                         </div>
                         <h3 class="text-2xl sm:text-3xl font-black text-slate-900 mb-6">
                             生活デザイン科 <span class="text-brand-500 text-lg sm:text-2xl font-bold block sm:inline">（Lifestyle Design）</span>
                         </h3>
                         <p class="text-slate-600 leading-relaxed mb-6">
-                            多肉植物、観葉植物などの園芸分野（フラワーデザイン）をはじめ、調理、被服（和裁・洋裁）、さらに保育や福祉に至る家庭科の分野をトータルに学習。自分の描く将来目標にジャストフィットした独自のアプリ開発（FileMakerなどを用いた西農祭ガイド）も行う、先進の家庭科学科です。
+                            調理、被服、保育、福祉などの家庭科学習をトータルに深め、生活をクリエイティブに彩るスキルを磨きます。中でも名物プロジェクト「高校生レストラン・いちょう」では、地元のゼロエネルギーホテル「ITOMACHI HOTEL 0」や公民館等とコラボ！生徒自身がメニュー開発から調理、おもてなし接客まで一気通貫で行い、西農産の新鮮な野菜や千町棚田米を活かした最高峰の限定ランチを提供しています。
                         </p>
                         <!-- Check list -->
                         <ul class="space-y-3 font-semibold text-slate-800">
+                            <li class="flex items-center gap-2"><i data-lucide="check-circle-2" class="w-5 h-5 text-brand-500"></i> 「高校生レストラン」を通じたプロレベルの調理・接客実務体験</li>
                             <li class="flex items-center gap-2"><i data-lucide="check-circle-2" class="w-5 h-5 text-brand-500"></i> 食生活、衣生活、保育、園芸など多岐にわたる実習と資格取得</li>
-                            <li class="flex items-center gap-2"><i data-lucide="check-circle-2" class="w-5 h-5 text-brand-500"></i> 美しい色彩を創出する季節の鉢物・苗物の温室栽培・販売</li>
-                            <li class="flex items-center gap-2"><i data-lucide="check-circle-2" class="w-5 h-5 text-brand-500"></i> FileMakerを使ったアプリ制作など、IT×家庭科の日本最先端カリキュラム</li>
+                            <li class="flex items-center gap-2"><i data-lucide="check-circle-2" class="w-5 h-5 text-brand-500"></i> 自作アプリ「西農祭ガイド」を始めとするIT×家庭科の先進的融合</li>
                         </ul>
                     </div>
                 </div>
@@ -432,7 +496,7 @@
                 <div class="w-12 h-1 bg-brand-500 mx-auto mt-4 rounded-full"></div>
                 <p class="text-slate-600 mt-6 text-sm sm:text-base leading-relaxed">
                     四季の実習、地域貢献、IT×SDGsなど、生徒たちが主役となって動く特別なプロジェクト。
-                    <span class="text-brand-accent font-bold block mt-2">👇 いずれかのプロジェクトを押すと、下の「インタラクティブ・特設ラボ」で詳細情報・シミュレーターが起動します！</span>
+                    <span class="text-brand-accent font-extrabold block mt-2">👇 いずれかのプロジェクトを押すと、下の「インタラクティブ・特設ラボ」で詳細情報・シミュレーターが起動します！</span>
                 </p>
             </div>
 
@@ -440,8 +504,8 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 
                 <!-- Card 1 -->
-                <button onclick="selectProject('drone-project')" class="group text-left focus:outline-none relative overflow-hidden rounded-2xl bg-slate-100 shadow-md h-80 w-full transition-all hover:ring-4 hover:ring-brand-accent" data-aos="fade-up" data-aos-delay="100">
-                    <img src="https://images.unsplash.com/photo-1592982537447-7440770cbfc9?auto=format&fit=crop&q=80&w=800" alt="春の実習" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                <button onclick="selectProject('drone-project')" class="group text-left focus:outline-none relative overflow-hidden rounded-2xl bg-slate-100 shadow-md h-80 w-full transition-all hover:ring-4 hover:ring-brand-accent flex" data-aos="fade-up" data-aos-delay="100">
+                    <div class="absolute inset-0 w-full h-full crop-agriculture bg-cover transition-transform duration-500 group-hover:scale-110"></div>
                     <div class="absolute inset-0 bg-gradient-to-t from-brand-forest/90 via-transparent to-transparent"></div>
                     <div class="absolute bottom-6 left-6 right-6 text-white z-10">
                         <span class="text-brand-accent text-xs font-bold tracking-widest uppercase block mb-1">SPRING / DX</span>
@@ -454,8 +518,11 @@
                 </button>
 
                 <!-- Card 2 -->
-                <button onclick="selectProject('pizza-project')" class="group text-left focus:outline-none relative overflow-hidden rounded-2xl bg-slate-100 shadow-md h-80 w-full transition-all hover:ring-4 hover:ring-brand-accent" data-aos="fade-up" data-aos-delay="200">
-                    <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&q=80&w=800" alt="夏の実習" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                <button onclick="selectProject('pizza-project')" class="group text-left focus:outline-none relative overflow-hidden rounded-2xl bg-slate-100 shadow-md h-80 w-full transition-all hover:ring-4 hover:ring-brand-accent flex" data-aos="fade-up" data-aos-delay="200">
+                    <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&q=80&w=800" 
+                         alt="ピザーラ地産地消コラボ" 
+                         class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                         onerror="handleImgError(this, 'pizza')">
                     <div class="absolute inset-0 bg-gradient-to-t from-brand-forest/90 via-transparent to-transparent"></div>
                     <div class="absolute bottom-6 left-6 right-6 text-white z-10">
                         <span class="text-brand-accent text-xs font-bold tracking-widest uppercase block mb-1">SUMMER / COLLAB</span>
@@ -468,8 +535,11 @@
                 </button>
 
                 <!-- Card 3 -->
-                <button onclick="selectProject('harvest-project')" class="group text-left focus:outline-none relative overflow-hidden rounded-2xl bg-slate-100 shadow-md h-80 w-full transition-all hover:ring-4 hover:ring-brand-accent" data-aos="fade-up" data-aos-delay="300">
-                    <img src="https://images.unsplash.com/photo-1611080626919-7cf5a9dbab5b?auto=format&fit=crop&q=80&w=800" alt="秋の実習" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                <button onclick="selectProject('harvest-project')" class="group text-left focus:outline-none relative overflow-hidden rounded-2xl bg-slate-100 shadow-md h-80 w-full transition-all hover:ring-4 hover:ring-brand-accent flex" data-aos="fade-up" data-aos-delay="300">
+                    <img src="https://images.unsplash.com/photo-1615485290382-441e4d049cb5?auto=format&fit=crop&q=80&w=800" 
+                         alt="西農祭（大収穫祭）" 
+                         class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                         onerror="handleImgError(this, 'apple')">
                     <div class="absolute inset-0 bg-gradient-to-t from-brand-forest/90 via-transparent to-transparent"></div>
                     <div class="absolute bottom-6 left-6 right-6 text-white z-10">
                         <span class="text-brand-accent text-xs font-bold tracking-widest uppercase block mb-1">AUTUMN / FESTIVAL</span>
@@ -482,8 +552,11 @@
                 </button>
 
                 <!-- Card 4 -->
-                <button onclick="selectProject('sss-project')" class="group text-left focus:outline-none relative overflow-hidden rounded-2xl bg-slate-100 shadow-md h-80 w-full transition-all hover:ring-4 hover:ring-brand-accent" data-aos="fade-up" data-aos-delay="400">
-                    <img src="https://images.unsplash.com/photo-1508873696983-2df519f0397e?auto=format&fit=crop&q=80&w=800" alt="冬の実習" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                <button onclick="selectProject('sss-project')" class="group text-left focus:outline-none relative overflow-hidden rounded-2xl bg-slate-100 shadow-md h-80 w-full transition-all hover:ring-4 hover:ring-brand-accent flex" data-aos="fade-up" data-aos-delay="400">
+                    <img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&q=80&w=1000" 
+                         alt="Team SSS 育水ガイド" 
+                         class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                         onerror="handleImgError(this, 'droplet')">
                     <div class="absolute inset-0 bg-gradient-to-t from-brand-forest/90 via-transparent to-transparent"></div>
                     <div class="absolute bottom-6 left-6 right-6 text-white z-10">
                         <span class="text-brand-accent text-xs font-bold tracking-widest uppercase block mb-1">SDGS PROJECT / WATER</span>
@@ -496,8 +569,11 @@
                 </button>
 
                 <!-- Card 5 -->
-                <button onclick="selectProject('papaya-project')" class="group text-left focus:outline-none relative overflow-hidden rounded-2xl bg-slate-100 shadow-md h-80 w-full transition-all hover:ring-4 hover:ring-brand-accent" data-aos="fade-up" data-aos-delay="500">
-                    <img src="https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?auto=format&fit=crop&q=80&w=800" alt="クラブ活動" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                <button onclick="selectProject('papaya-project')" class="group text-left focus:outline-none relative overflow-hidden rounded-2xl bg-slate-100 shadow-md h-80 w-full transition-all hover:ring-4 hover:ring-brand-accent flex" data-aos="fade-up" data-aos-delay="500">
+                    <img src="https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&q=80&w=1000" 
+                         alt="青パパイヤ研究（太陽光パネル併設ソーラーシェアリング架台下の様子）" 
+                         class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                         onerror="handleImgError(this, 'sun')">
                     <div class="absolute inset-0 bg-gradient-to-t from-brand-forest/90 via-transparent to-transparent"></div>
                     <div class="absolute bottom-6 left-6 right-6 text-white z-10">
                         <span class="text-brand-accent text-xs font-bold tracking-widest uppercase block mb-1">DECARBONIZATION / AWARD</span>
@@ -510,8 +586,11 @@
                 </button>
 
                 <!-- Card 6 -->
-                <button onclick="selectProject('digital-project')" class="group text-left focus:outline-none relative overflow-hidden rounded-2xl bg-slate-100 shadow-md h-80 w-full transition-all hover:ring-4 hover:ring-brand-accent" data-aos="fade-up" data-aos-delay="600">
-                    <img src="https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&q=80&w=800" alt="地域連携" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                <button onclick="selectProject('digital-project')" class="group text-left focus:outline-none relative overflow-hidden rounded-2xl bg-slate-100 shadow-md h-80 w-full transition-all hover:ring-4 hover:ring-brand-accent flex" data-aos="fade-up" data-aos-delay="600">
+                    <img src="https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&q=80&w=800" 
+                         alt="西条市民活動とのデジタル連携" 
+                         class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                         onerror="handleImgError(this, 'layout')">
                     <div class="absolute inset-0 bg-gradient-to-t from-brand-forest/90 via-transparent to-transparent"></div>
                     <div class="absolute bottom-6 left-6 right-6 text-white z-10">
                         <span class="text-brand-accent text-xs font-bold tracking-widest uppercase block mb-1">LOCAL COMMUNITY / IT</span>
@@ -527,7 +606,7 @@
         </div>
     </section>
 
-    <!-- 4.5 NEW Section: Interactive Lab Showcase (Jump Target) -->
+    <!-- 4.5 Interactive Lab Showcase (Jump Target) -->
     <section id="project-detail-section" class="py-16 bg-slate-900 text-white border-y border-brand-forestLight/40 scroll-mt-24">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
@@ -560,7 +639,7 @@
                             <i data-lucide="compass" class="w-5 h-5"></i>
                             <span>SPRING / SMART AGRICULTURE</span>
                         </div>
-                        <h4 class="text-2.5xl sm:text-3xl font-black tracking-tight" id="active-title">新緑の田植え実習＆ドローン講習</h4>
+                        <h4 class="text-2.5xl sm:text-3xl font-black tracking-tight" id="active-title">新緑 of 田植え実習＆ドローン講習</h4>
                         <p class="text-slate-300 leading-relaxed text-sm sm:text-base" id="active-desc">
                             西条の豊かな自噴水「うちぬき」を活用して育てる水田での田植えを体験。
                             さらに、パナソニック教育助成やDXハイスクールの支援によって導入された高精度な農業ドローンを操縦し、空中からマルチスペクトルカメラによる生育分析の基礎を学びます。
@@ -578,36 +657,7 @@
 
                     <!-- Interactive Simulator on Right -->
                     <div class="lg:col-span-6 bg-slate-950 border border-white/10 p-6 rounded-2xl relative" id="active-sim">
-                        <div class="flex items-center justify-between border-b border-white/10 pb-3 mb-4">
-                            <span class="text-xs font-bold tracking-widest text-brand-accent flex items-center gap-1.5"><i data-lucide="activity" class="w-4 h-4"></i> ドローン操作シミュレータ</span>
-                            <span class="text-[10px] bg-red-500/20 text-red-400 border border-red-500/30 px-2 py-0.5 rounded font-bold uppercase">CONNECTED</span>
-                        </div>
-                        
-                        <!-- SIM CONTENT: DRONE -->
-                        <div class="space-y-4 text-center py-6" id="drone-sim-box">
-                            <p class="text-xs text-slate-400">ドローンを操作して円山農場のミカン園の生育データをマッピングしてください</p>
-                            <div class="w-full bg-slate-900 border border-slate-800 rounded-xl p-4 flex flex-col justify-center items-center h-48 relative overflow-hidden">
-                                <div class="absolute -top-1/4 w-full h-0.5 bg-brand-accent/20 animate-pulse"></div>
-                                <div class="transition-transform duration-300" id="drone-icon-box">
-                                    <i data-lucide="navigation" class="w-16 h-16 text-brand-accent transform rotate-45 animate-bounce"></i>
-                                </div>
-                                <div class="absolute bottom-4 left-4 text-left text-[10px] text-slate-500">
-                                    <p>高度: <span class="text-white" id="drone-alt">15m</span></p>
-                                    <p>散布範囲: <span class="text-white" id="drone-cover">24%</span></p>
-                                </div>
-                                <div class="absolute bottom-4 right-4 text-right text-[10px] text-slate-500">
-                                    <p>バッテリー: <span class="text-green-400" id="drone-batt">92%</span></p>
-                                </div>
-                            </div>
-                            <div class="flex gap-2 justify-center">
-                                <button onclick="flyDrone()" class="bg-brand-500 hover:bg-brand-600 px-4 py-2 rounded-lg text-xs font-extrabold text-white flex items-center gap-1 shadow-md">
-                                    <i data-lucide="arrow-up" class="w-3.5 h-3.5"></i> 操縦(高度を上げる)
-                                </button>
-                                <button onclick="sprayAgri()" class="bg-brand-accent hover:bg-orange-600 px-4 py-2 rounded-lg text-xs font-extrabold text-white flex items-center gap-1 shadow-md">
-                                    <i data-lucide="cloud-rain" class="w-3.5 h-3.5"></i> 空中散布を実行
-                                </button>
-                            </div>
-                        </div>
+                        <!-- Dynamic Content will load here -->
                     </div>
 
                 </div>
@@ -666,7 +716,7 @@
                             </div>
                             <h4 class="font-bold text-slate-900 mb-3">「公務員試験や、推薦進学に非常に有利な環境！」</h4>
                             <p class="text-slate-600 text-sm leading-relaxed">
-                                環境工学科で土木技術やGIS、水質分析を学んでいます。西条農業高校は推薦（指定校・AO）の枠が多く、農業土木分野は国や愛媛県、西条市の公務員枠に強いため、将来のキャリア設計がとても安定しています！
+                                環境工学科で土木技術やGIS, 水質分析を学んでいます。西条農業高校は推薦（指定校・AO）の枠が多く、農業土木分野は国や愛媛県、西条市の公務員枠に強いため、将来のキャリア設計がとても安定しています！
                             </p>
                         </div>
                         <div class="flex items-center gap-3 mt-6 pt-6 border-t border-slate-100">
@@ -825,7 +875,7 @@
         </div>
     </footer>
 
-    <!-- Interactive Custom Form Modal (Replacer for Alert/Native dialogs) -->
+    <!-- Interactive Custom Form Modal -->
     <div id="form-modal" class="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-md flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full overflow-hidden transform scale-95 opacity-0 transition-all duration-300" id="modal-card">
             <!-- Modal Header -->
@@ -1015,7 +1065,7 @@
         }
 
         // ==========================================
-        // NEW FEATURE: JUMP & INTERACTIVE PROJECT LAB
+        // JUMP & INTERACTIVE PROJECT LAB
         // ==========================================
         
         // Define exact data of youth projects for West Agri
@@ -1023,7 +1073,7 @@
             'drone-project': {
                 tag: 'SPRING / DX',
                 title: '田植え＆ドローン講習',
-                desc: '西条の豊かな自噴水「うちぬき」を活用して育てる水田での田植えを体験。さらに、パナソニック教育助成やDXハイスクールの支援によって導入された高精度な農業ドローンを操縦し、空中からマルチスペクトルカメラによる生育分析の基礎を学びます。',
+                desc: '西条の豊かな自噴水「うちぬき」を活用して育てる水田での田植えを体験。さらに、パナソニック教育助成やDXハイスクールの支援によって導入された高精度な農業ドローンを操縦し、空中からマルチスペクトルカメラによる生育 analysis の基礎を学びます。',
                 bullets: [
                     '1人1台のiPadを用いた、リアルタイムマルチスペクトル分析の実践',
                     '円山農場の実際の急斜面をマッピングする、安全基準に基づく操縦練習',
@@ -1031,30 +1081,68 @@
                 ],
                 simHtml: `
                     <div class="flex items-center justify-between border-b border-white/10 pb-3 mb-4">
-                        <span class="text-xs font-bold tracking-widest text-brand-accent flex items-center gap-1.5"><i data-lucide="activity" class="w-4 h-4"></i> ドローン操縦シミュレータ</span>
-                        <span class="text-[10px] bg-red-500/20 text-red-400 border border-red-500/30 px-2 py-0.5 rounded font-bold uppercase">CONNECTED</span>
+                        <span class="text-xs font-bold tracking-widest text-brand-accent flex items-center gap-1.5"><i data-lucide="activity" class="w-4 h-4"></i> ドローンスマート散布ゲーム</span>
+                        <span class="text-[10px] bg-red-500/20 text-red-400 border border-red-500/30 px-2 py-0.5 rounded font-bold uppercase">LIVE SIM</span>
                     </div>
-                    <div class="space-y-4 text-center py-4">
-                        <p class="text-xs text-slate-400 font-medium">ボタンを押して高度を調整し、空中散布を実行しましょう！</p>
-                        <div class="w-full bg-slate-900 border border-slate-800 rounded-xl p-4 flex flex-col justify-center items-center h-40 relative overflow-hidden">
-                            <div class="absolute -top-1/4 w-full h-0.5 bg-brand-accent/20 animate-pulse"></div>
-                            <div id="drone-icon-box" class="transition-transform duration-300">
-                                <i data-lucide="navigation" class="w-12 h-12 text-brand-accent transform rotate-45 animate-bounce"></i>
+                    <div class="space-y-4">
+                        <p class="text-xs text-slate-300 font-medium">【操作方法】左右ボタンでドローンを動かし、「散布」ボタンでみかん畑に名水を散布しよう！すべてのみかんをうるおそう！</p>
+                        
+                        <!-- Mini Game screen -->
+                        <div class="relative w-full bg-slate-950 border border-slate-800 rounded-xl p-2 h-44 overflow-hidden flex flex-col justify-between">
+                            <!-- Sky/Cloud -->
+                            <div class="absolute inset-0 opacity-10 pointer-events-none bg-gradient-to-b from-sky-500 to-transparent"></div>
+                            
+                            <!-- Drone Track (Top area) -->
+                            <div class="relative h-12 w-full mt-2">
+                                <!-- Drone Node -->
+                                <div id="sim-drone" class="absolute top-0 transition-all duration-300 ease-out flex flex-col items-center" style="left: 44%; width: 48px;">
+                                    <div class="text-2xl animate-bounce">🛸</div>
+                                    <!-- Spray particles effect (shown dynamically) -->
+                                    <div id="sim-spray-particles" class="hidden text-xs text-sky-400 animate-ping mt-1">💧 💧</div>
+                                </div>
                             </div>
-                            <div class="absolute bottom-3 left-4 text-left text-[10px] text-slate-500">
-                                <p>高度: <span class="text-white" id="drone-alt">15m</span></p>
-                                <p>散布率: <span class="text-white" id="drone-cover">24%</span></p>
+                            
+                            <!-- Orchard Field (Bottom area) -->
+                            <div class="grid grid-cols-5 gap-2 px-2 pb-2">
+                                <div id="tree-0" class="flex flex-col items-center bg-slate-900/60 p-1.5 rounded border border-slate-800 transition-all">
+                                    <span class="text-xl">🍊</span>
+                                    <span class="text-[9px] text-red-400 font-bold mt-0.5" id="status-0">乾燥</span>
+                                </div>
+                                <div id="tree-1" class="flex flex-col items-center bg-slate-900/60 p-1.5 rounded border border-slate-800 transition-all">
+                                    <span class="text-xl">🍊</span>
+                                    <span class="text-[9px] text-red-400 font-bold mt-0.5" id="status-1">乾燥</span>
+                                </div>
+                                <div id="tree-2" class="flex flex-col items-center bg-slate-900/60 p-1.5 rounded border border-slate-800 transition-all">
+                                    <span class="text-xl">🍊</span>
+                                    <span class="text-[9px] text-red-400 font-bold mt-0.5" id="status-2">乾燥</span>
+                                </div>
+                                <div id="tree-3" class="flex flex-col items-center bg-slate-900/60 p-1.5 rounded border border-slate-800 transition-all">
+                                    <span class="text-xl">🍊</span>
+                                    <span class="text-[9px] text-red-400 font-bold mt-0.5" id="status-3">乾燥</span>
+                                </div>
+                                <div id="tree-4" class="flex flex-col items-center bg-slate-900/60 p-1.5 rounded border border-slate-800 transition-all">
+                                    <span class="text-xl">🍊</span>
+                                    <span class="text-[9px] text-red-400 font-bold mt-0.5" id="status-4">乾燥</span>
+                                </div>
                             </div>
-                            <div class="absolute bottom-3 right-4 text-right text-[10px] text-slate-500">
-                                <p>バッテリー: <span class="text-green-400" id="drone-batt">92%</span></p>
+
+                            <!-- Dashboard overlay -->
+                            <div class="absolute top-2 right-2 flex gap-3 text-[10px] text-slate-400 bg-slate-900/80 px-2 py-1 rounded border border-white/5">
+                                <span>バッテリー: <span class="text-green-400 font-bold" id="sim-batt">100%</span></span>
+                                <span>散布率: <span class="text-brand-accent font-bold" id="sim-progress">0%</span></span>
                             </div>
                         </div>
-                        <div class="flex gap-2 justify-center">
-                            <button onclick="flyDrone()" class="bg-brand-500 hover:bg-brand-600 px-3 py-1.5 rounded-lg text-[11px] font-extrabold text-white flex items-center gap-1">
-                                <i data-lucide="arrow-up" class="w-3.5 h-3.5"></i> 高度上昇
+
+                        <!-- Controller Buttons -->
+                        <div class="grid grid-cols-3 gap-2">
+                            <button onclick="moveDrone('left')" class="bg-slate-800 hover:bg-slate-700 py-2.5 rounded-lg text-xs font-bold text-white flex items-center justify-center gap-1 active:scale-95 transition-all">
+                                <i data-lucide="arrow-left" class="w-4 h-4"></i> 左へ
                             </button>
-                            <button onclick="sprayAgri()" class="bg-brand-accent hover:bg-orange-600 px-3 py-1.5 rounded-lg text-[11px] font-extrabold text-white flex items-center gap-1">
-                                <i data-lucide="cloud-rain" class="w-3.5 h-3.5"></i> 空中散布
+                            <button onclick="triggerSpray()" class="bg-brand-accent hover:bg-yellow-500 py-2.5 rounded-lg text-xs font-black text-brand-700 flex items-center justify-center gap-1 shadow-lg shadow-brand-accent/20 active:scale-95 transition-all">
+                                <i data-lucide="cloud-rain" class="w-4 h-4"></i> 散布開始!
+                            </button>
+                            <button onclick="moveDrone('right')" class="bg-slate-800 hover:bg-slate-700 py-2.5 rounded-lg text-xs font-bold text-white flex items-center justify-center gap-1 active:scale-95 transition-all">
+                                右へ <i data-lucide="arrow-right" class="w-4 h-4"></i>
                             </button>
                         </div>
                     </div>
@@ -1078,7 +1166,7 @@
                         <p class="text-xs text-slate-400 text-center font-medium">トッピングをタップして「絹かわなすピザ」を作ろう！</p>
                         <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 flex justify-between items-center h-32 relative">
                             <div class="w-20 h-20 rounded-full border-4 border-amber-600 bg-amber-100 flex items-center justify-center text-red-500 font-bold text-center text-xs relative overflow-hidden transition-all duration-300" id="pizza-crust">
-                                <div class="absolute inset-2 border-2 border-dashed border-red-400/40 rounded-full"></div>
+                                <div class="absolute inset-2 border-2 border-dashed border-red-400/45 rounded-full"></div>
                                 <span id="pizza-status">ベースピザ</span>
                             </div>
                             <div class="text-left text-xs space-y-1">
@@ -1160,7 +1248,7 @@
             'papaya-project': {
                 tag: 'DECARBONIZATION / AWARD',
                 title: '青パパイヤ研究・環境大臣賞',
-                desc: '食農科学科が中心となり、温室ハウスの上部に太陽光発電パネルを設置し、その下部で日陰でも生育可能な「青パパイヤ」を栽培する最先端のハイブリッド農業を研究。「ソーラーシェアリング×脱炭素農業」の素晴らしい試みとして、環境省主催のコンテストで全国最高賞の【環境大臣賞金賞】を受賞しました！',
+                desc: '食農科学科が中心となり、温室ハウスの上部に太陽光発電パネルを設置し、その下部で日陰でも生育可能な「青パパイヤ」を栽培する最先端のハイブリッド農業を研究。「ソーラーシェアリング×脱炭素農業」の素晴らしい試みとして、環境省主催 of コンテストで全国最高賞の【環境大臣賞金賞】を受賞しました！',
                 bullets: [
                     '荒廃農地を蘇らせ、地球温暖化対策（CO2吸収量が非常に多いパパイヤ）への挑戦',
                     '収穫した青パパイヤの酵素を活かし、地元スイーツ店とヘルシーお菓子を開発',
@@ -1193,7 +1281,7 @@
                 desc: '生活デザイン科や各学科の生徒たちが、iPadのClaris FileMakerやデザインアプリを用いて、地域に貢献する「デジタルポスター」を地域団体や西条市役所と共同制作。単なる紙のポスターではなく、QRコードやインタラクティブマップを埋め込み、商店街や歴史的名所を多面的にPRする次世代のまちづくりを進めています。',
                 bullets: [
                     '高校生のフレッシュなアイデアとデザインセンスを直接地域社会に活かす',
-                    'プロのグラフィックデザイナーからノウハウを受け継ぐ本格的なデジタル授業',
+                    'プロのグラフィックデザイナーからノウ立場を受け継ぐ本格的なデジタル授業',
                     '作ったポスターは西条市内の主要施設やデジタル看板（サイネージ）に公式掲載'
                 ],
                 simHtml: `
@@ -1272,62 +1360,108 @@
             targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
+        // Auto load first project on startup
+        window.addEventListener('DOMContentLoaded', () => {
+            selectProject('drone-project');
+        });
+
         // --- SUB INTERACTIVE FUNCTIONS FOR LAB SIMULATOR ---
         
-        // 1. Drone Functions
-        let altValue = 15;
-        let coverValue = 24;
-        let battValue = 92;
-        
-        function flyDrone() {
-            altValue += 5;
-            if(altValue > 45) altValue = 10;
-            const altEl = document.getElementById('drone-alt');
-            if(altEl) altEl.textContent = `${altValue}m`;
+        let dronePositionIndex = 2; // 0 to 4 (matching tree index)
+        const dronePositions = ['4%', '24%', '44%', '64%', '84%'];
+        let treeStates = [false, false, false, false, false]; // false = dry, true = watered
+        let droneBattery = 100;
+
+        function moveDrone(direction) {
+            if (droneBattery <= 0) return;
+            if (direction === 'left' && dronePositionIndex > 0) {
+                dronePositionIndex--;
+            } else if (direction === 'right' && dronePositionIndex < 4) {
+                dronePositionIndex++;
+            }
             
-            // Add custom visual kick
-            const droneIcon = document.getElementById('drone-icon-box');
-            if(droneIcon) {
-                droneIcon.style.transform = `scale(1.2) rotate(${altValue * 5}deg)`;
-                setTimeout(() => {
-                    droneIcon.style.transform = 'scale(1) rotate(45deg)';
-                }, 200);
+            const droneEl = document.getElementById('sim-drone');
+            if (droneEl) {
+                droneEl.style.left = dronePositions[dronePositionIndex];
             }
         }
 
-        function sprayAgri() {
-            coverValue += 16;
-            battValue -= 4;
-            if(coverValue > 100) {
-                coverValue = 100;
-                // Add a simulated visual success state
-                const simBox = document.getElementById('drone-sim-box');
-                if(simBox) {
-                    simBox.innerHTML = `
-                        <div class="text-center space-y-3 py-6 animate-fade-in">
-                            <div class="w-12 h-12 rounded-full bg-green-500/20 text-green-400 border border-green-500/30 flex items-center justify-center mx-auto">
-                                <i data-lucide="check" class="w-6 h-6"></i>
-                            </div>
-                            <h5 class="text-sm font-bold text-white">ミカン園の空中散布100%成功！</h5>
-                            <p class="text-[11px] text-slate-400">マッピングデータをFileMakerにアップロード完了しました。</p>
-                            <button onclick="selectProject('drone-project')" class="text-xs text-brand-accent underline hover:text-brand-accent/80">再試行</button>
-                        </div>
-                    `;
-                    lucide.createIcons();
-                }
-                return;
+        function triggerSpray() {
+            if (droneBattery <= 0) return;
+            
+            // Show particles
+            const particles = document.getElementById('sim-spray-particles');
+            if (particles) {
+                particles.classList.remove('hidden');
+                setTimeout(() => {
+                    particles.classList.add('hidden');
+                }, 600);
             }
-            if(battValue < 10) battValue = 95;
 
-            const coverEl = document.getElementById('drone-cover');
-            const battEl = document.getElementById('drone-batt');
-            if(coverEl) coverEl.textContent = `${coverValue}%`;
-            if(battEl) {
-                battEl.textContent = `${battValue}%`;
-                if(battValue < 30) {
-                    battEl.className = "text-red-400 font-bold";
+            // Consume battery
+            droneBattery = Math.max(0, droneBattery - 10);
+            const battEl = document.getElementById('sim-batt');
+            if (battEl) {
+                battEl.textContent = `${droneBattery}%`;
+                if (droneBattery < 30) {
+                    battEl.className = "text-red-500 font-bold";
                 }
             }
+
+            // Water the target tree
+            treeStates[dronePositionIndex] = true;
+            const targetTreeCard = document.getElementById(`tree-${dronePositionIndex}`);
+            const targetTreeStatus = document.getElementById(`status-${dronePositionIndex}`);
+            if (targetTreeCard && targetTreeStatus) {
+                targetTreeCard.classList.remove('bg-slate-900/60', 'border-slate-800');
+                targetTreeCard.classList.add('bg-emerald-950/40', 'border-emerald-500/50');
+                targetTreeStatus.textContent = "潤い(DX)";
+                targetTreeStatus.classList.remove('text-red-400');
+                targetTreeStatus.classList.add('text-emerald-400');
+            }
+
+            // Calculate progress
+            const wateredCount = treeStates.filter(Boolean).length;
+            const progress = Math.round((wateredCount / 5) * 100);
+            const progressEl = document.getElementById('sim-progress');
+            if (progressEl) {
+                progressEl.textContent = `${progress}%`;
+            }
+
+            // Win state
+            if (progress === 100) {
+                setTimeout(() => {
+                    const activeSim = document.getElementById('active-sim');
+                    if (activeSim) {
+                        activeSim.innerHTML = `
+                            <div class="flex items-center justify-between border-b border-white/10 pb-3 mb-4">
+                                <span class="text-xs font-bold tracking-widest text-brand-accent flex items-center gap-1.5"><i data-lucide="activity" class="w-4 h-4"></i> ミッション完了</span>
+                                <span class="text-[10px] bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded font-bold">SUCCESS</span>
+                            </div>
+                            <div class="text-center space-y-4 py-8 animate-fade-in">
+                                <div class="w-16 h-16 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center mx-auto">
+                                    <i data-lucide="award" class="w-8 h-8"></i>
+                                </div>
+                                <h5 class="text-lg font-bold text-white">ミカン園の散布シミュレーション成功！</h5>
+                                <p class="text-xs text-slate-300 max-w-sm mx-auto">
+                                    名水「うちぬき」を適切にすべてのみかんに散布できました。自動データ収集により、糖度予測モデルがアップデートされました！
+                                </p>
+                                <button onclick="resetDroneSim()" class="bg-brand-500 hover:bg-brand-600 px-4 py-2 rounded-xl text-xs font-bold text-white shadow-md">
+                                    もう一度プレイする
+                                </button>
+                            </div>
+                        `;
+                        lucide.createIcons();
+                    }
+                }, 800);
+            }
+        }
+
+        function resetDroneSim() {
+            dronePositionIndex = 2;
+            treeStates = [false, false, false, false, false];
+            droneBattery = 100;
+            selectProject('drone-project');
         }
 
         // 2. Pizza Topping Functions
